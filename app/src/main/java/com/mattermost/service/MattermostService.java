@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.webkit.CookieSyncManager;
 
 import com.mattermost.mattermost.R;
 import com.mattermost.model.User;
@@ -45,6 +46,10 @@ public class MattermostService {
     public MattermostService(Context context) {
         this.context = context;
         String userAgent = context.getResources().getString(R.string.app_user_agent);
+
+        //dummy CookieSyncManager instance needed by android 4.3, to fix a java.lang.IllegalStateException: "Call CookieSyncManager::createInstance() or create a webview before using this class"
+        @SuppressWarnings("deprecation")
+        CookieSyncManager instance = CookieSyncManager.createInstance(context);
 
         cookieStore = new WebkitCookieManagerProxy();
 
